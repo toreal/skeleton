@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -19,10 +20,16 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
             pictureBox1.Image = bmp;
+            for ( int i = 0; i < 640*480; i++)
+               dir[i] = new myvector(0, 0);
 
         }
         ArrayList alist = new ArrayList();
+
         Bitmap bmp = new Bitmap(640, 480);
+      
+         myvector [] dir = new myvector[640*480];
+        float[] values = new float[640 * 480];
         const double maxdis = Double.MaxValue;
         const float SCALE = 30;
 
@@ -54,7 +61,37 @@ namespace WindowsFormsApp1
 
             }
 
-        
+            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            int stride = data.Stride;
+           unsafe
+            {
+                byte* ptr = (byte*)data.Scan0;
+                // Check this is not a null area
+                //if (!areaToPaint.IsEmpty)
+                {
+                    int ind = 0;
+                    // Go through the draw area and set the pixels as they should be
+                    for (int y = 0; y < bmp.Height; y++)
+                    {
+                        for (int x = 0; x < bmp.Width; x++)
+                        {
+                            if (values[ind] >= 0)
+                            {
+
+                                Color c = generateRGB(values[ind]);
+                                // layer.GetBitmap().SetPixel(x, y, m_colour);
+                                ptr[(x * 3) + y * stride] = c.B;
+                                ptr[(x * 3) + y * stride + 1] = c.G;
+                                ptr[(x * 3) + y * stride + 2] = c.R;
+                            }
+                            ind++;
+                        }
+                    }
+                }
+            }
+            bmp.UnlockBits(data);
+
+
 
             pictureBox1.Invalidate();
 
@@ -67,13 +104,13 @@ namespace WindowsFormsApp1
         {
            public float x;
            public float y;
-           public float z;
+        //   public float z;
 
-           public  myvector(float a, float b, float c)
+           public  myvector(float a, float b)
             {
                 x = a;
                 y = b;
-                z = c;
+           //     z = c;
 
             }
 
@@ -100,26 +137,26 @@ namespace WindowsFormsApp1
             //   int i = 270;
             //    int j = 140;
             float myv = -1;
-            myvector dir = new myvector(0.0f, 0.0f, 0.0f);
+           
+          //  myvector dir = new myvector(0.0f, 0.0f);
 
-            for ( int j = 0; j < 10;j++)
-            for ( int i = 0; i < 100; i++)
-            {
-                    Color c = generateRGB(i/100.0f);
-                    bmp.SetPixel(i, j, c);
+            
 
-                }
+            int idx;
 
-            for (int j = 50; j < 480; j++)
+            for (int j = 0; j < 480; j++)
                 for ( int i = 0; i < 640; i++)
                 {
-                    float value=0.0f;
-                    mytest(i, j,  ref value, ref dir);
+                  //  float value=0.0f;
 
-                    if ( value > 0 )
+                    idx = j * 640 + i;
+
+                    mytest(i, j,  ref values[idx], ref dir[idx]);
+
+                    if ( values[idx] > 0 )
                     {
 
-                        myv = value/ SCALE;
+                        myv = values[idx];
                         Color c = generateRGB(myv);
                         bmp.SetPixel(i, j, c);
                        // Debug.WriteLine(myv);
@@ -135,8 +172,16 @@ namespace WindowsFormsApp1
                 }
 
 
+            for (int j = 0; j < 10; j++)
+                for (int i = 0; i < 100; i++)
+                {
+                    Color c = generateRGB(i / 100.0f);
+                    bmp.SetPixel(i, j, c);
 
-            Debug.WriteLine(myv);
+                }
+
+
+//            Debug.WriteLine(myv);
         }
        
         void mytest(int x,int y , ref float  val, ref myvector dir)
@@ -268,6 +313,7 @@ namespace WindowsFormsApp1
                 val = val * 10;
                 if (val > SCALE)
                     val = SCALE;
+                val = val / SCALE;
 
             }
             //val = (x + y) % 255;
@@ -281,8 +327,23 @@ namespace WindowsFormsApp1
 
             foreach (Point p in alist)
                 sw.WriteLine(p);
-
+            
             sw.Close();
+
+            System.IO.StreamWriter sw2 = new System.IO.StreamWriter("vector.txt");
+
+            foreach (myvector pv in dir)
+                sw2.WriteLine("{0} {1}",pv.x,  pv.y );
+
+            sw2.Close();
+
+
+            System.IO.StreamWriter sw3 = new System.IO.StreamWriter("values.txt");
+
+            foreach (float v in values)
+                sw3.WriteLine( v);
+
+            sw3.Close();
 
         }
 
@@ -306,7 +367,48 @@ namespace WindowsFormsApp1
 
             sr.Close();
 
+
+            System.IO.StreamReader sw2 = new System.IO.StreamReader("vector.txt");
+
+             str = sw2.ReadLine();
+            int ind = 0;
+            while (!String.IsNullOrEmpty(str))
+            {
+                
+                String [] sub=str.Split(' ');
+                dir[ind].x=float.Parse(sub[0]);
+                dir[ind].y = float.Parse(sub[1]);
+
+                ind++;
+                str = sw2.ReadLine();
+
+            }
+            sw2.Close();
+
+
+            System.IO.StreamReader sw3 = new System.IO.StreamReader("values.txt");
+
+            str = sw3.ReadLine();
+            ind = 0;
+            while (!String.IsNullOrEmpty(str))
+            {
+                values[ind] = float.Parse(str);
+                ind++;
+                str = sw3.ReadLine();
+
+            }
+
+            sw3.Close();
+
+
+
             redraw();
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
 
         }
     }
