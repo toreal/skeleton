@@ -254,7 +254,8 @@ namespace WindowsFormsApp1
 
                     double  delta = A1 * B2 - A2 * B1;
                     if (delta == 0)
-                        throw new ArgumentException("Lines are parallel");
+                        continue;
+                        //throw new ArgumentException("Lines are parallel");
 
                       nx = (B2 * C1 - B1 * C2) / delta;
                       ny = (A1 * C2 - A2 * C1) / delta;
@@ -454,14 +455,16 @@ namespace WindowsFormsApp1
                 int ini = ind = ((int)p.y) * 640 +(int) p.x;
 
                 int next = 0;
-                while (values[ind] < 0 && next < nbuf && ind >=0 && ind < 640*480)
+                
+
+                while (values[ind] < 0 && next < nbuf && ind >=0 && ind < 640*480 || float.IsNaN(values[ind ]))
                 {
                     ind = ini +buf[next];
                     next++;
 
                 }
 
-                if (values[ind] < 0)
+                if (values[ind] < 0 || float.IsNaN(values[ind]))
                     continue;
 
 
