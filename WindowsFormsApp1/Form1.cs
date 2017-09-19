@@ -80,8 +80,8 @@ namespace WindowsFormsApp1
         {
             //  Graphics g = Graphics.FromImage(bmp);
 
-        //   int i = 500;
-        //    int j = 10;
+      //   int i = 270;
+        //    int j = 140;
            for (int j = 0; j < 480; j++)
                 for ( int i = 0; i < 640; i++)
                 {
@@ -154,6 +154,9 @@ namespace WindowsFormsApp1
 
                     double tx = 1;
                     double ty = 1;
+                    double tsx = 1;
+                    double tsy = 1;
+
 
                     if (Math.Abs(q.X - p.X) > 0)
                         tx = (nx - p.X) / (q.X - p.X);
@@ -161,8 +164,13 @@ namespace WindowsFormsApp1
                     if (Math.Abs(q.Y - p.Y) > 0)
                         ty = (ny - p.Y) / (q.Y - p.Y);
 
+                    if ( Math.Abs(dx) >0.00001)
+                    tsx = (nx - x) / dx;
+                    if ( Math.Abs(dy)>0.00001)
+                    tsy = (ny - y) / dy;
 
-                    if (( tx >=0 && tx <=1) && ( ty >=0 && ty <=1))
+
+                    if (( tx >=0 && tx <=1) && ( ty >=0 && ty <=1) && tsx >=0 && tsy >=0)
                     {
 
 
@@ -183,7 +191,7 @@ namespace WindowsFormsApp1
                 if (shortest < maxdis)
                 {
                     bfind = true;
-                    g.DrawLine(pen, new Point(x, y), new Point((int)sx, (int)sy));
+                //    g.DrawLine(pen, new Point(x, y), new Point((int)sx, (int)sy));
                    // break;
                 }else //都沒有找到交點
                 {
