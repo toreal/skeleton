@@ -20,8 +20,8 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
             pictureBox1.Image = bmp;
-            for ( int i = 0; i < 640*480; i++)
-               dir[i] = new myvector(0, 0);
+          //  for ( int i = 0; i < 640*480; i++)
+           //    dir[i] = new myvector(0, 0);
 
         }
         ArrayList alist = new ArrayList();
@@ -75,7 +75,7 @@ namespace WindowsFormsApp1
                     {
                         for (int x = 0; x < bmp.Width; x++)
                         {
-                            if (values[ind] >= 0)
+                            if (values[ind] > 0)
                             {
 
                                 Color c = generateRGB(values[ind]);
@@ -100,7 +100,7 @@ namespace WindowsFormsApp1
 
         }
 
-        class myvector
+        struct  myvector
         {
            public float x;
            public float y;
@@ -113,6 +113,21 @@ namespace WindowsFormsApp1
            //     z = c;
 
             }
+
+            public static myvector operator +(myvector o1, myvector o2)
+            {
+                myvector ret= new myvector(o1.x+o2.x, o1.y+o2.y);
+                
+                return ret;
+            }
+
+            public static myvector operator *(float v, myvector o2)
+            {
+                myvector ret = new myvector(v*o2.x, v* o2.y);
+
+                return ret;
+            }
+
 
         }
 
@@ -312,8 +327,8 @@ namespace WindowsFormsApp1
             {
                 val =(float) Math.Sqrt(retx * retx + rety * rety);
 
-                dir.x = retx/val;
-                dir.y = rety/val;
+                dir.x = -retx/val;
+                dir.y = -rety/val;
 
      //           Debug.WriteLine(val);
                 val = val * 10;
@@ -415,7 +430,60 @@ namespace WindowsFormsApp1
         private void button4_Click(object sender, EventArgs e)
         {
 
+            int ind;
 
+            Graphics g = Graphics.FromImage(bmp);
+            Pen pen = new Pen(Brushes.Black, 1);
+            Pen pen2 = new Pen(Brushes.White, 1);
+            float step = 2.0f;
+
+            int[] buf = { 1, -1, 640, -640,2,-2,640*2,-640*2,640+1,640-1,-640+1,-640-1 };
+            int nbuf = buf.Length;
+
+            int lens = alist.Count;
+
+            for (int i = 0; i < lens; i++)
+            {
+                Point p1 = (Point)alist[i];
+                Point p2 = (Point)alist[(i + 1) % lens];
+                myvector p = 0.5f*(new myvector(p1.X,p1.Y) +new  myvector(p2.X,p2.Y));
+
+                //foreach( Point p in  alist)
+                //{
+
+                int ini = ind = ((int)p.y) * 640 +(int) p.x;
+
+                int next = 0;
+                while (values[ind] < 0 && next < nbuf && ind >=0 && ind < 640*480)
+                {
+                    ind = ini +buf[next];
+                    next++;
+
+                }
+
+                if (values[ind] < 0)
+                    continue;
+
+
+                myvector np= p + step *dir[ind];
+                ind = (int)np.x + (((int)np.y) * 640);
+
+                
+
+                while(values[ind] > 0.001 )
+                {
+                    np = np + step*dir[ind];
+                    ind = (int)np.x + ((int)np.y * 640);
+
+                    g.DrawEllipse(pen, new Rectangle((int)np.x-2,(int)np.y-2,4,4));
+                }
+
+                g.DrawEllipse(pen2, new Rectangle((int)np.x - 3, (int)np.y - 3, 6, 6));
+
+
+            }
+
+            pictureBox1.Invalidate();
         }
     }
 }
