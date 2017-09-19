@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,8 @@ namespace WindowsFormsApp1
         }
         ArrayList alist = new ArrayList();
         Bitmap bmp = new Bitmap(640, 480);
+        const double maxdis = Double.MaxValue;
+        const float SCALE = 30;
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
@@ -62,9 +65,9 @@ namespace WindowsFormsApp1
 
         class myvector
         {
-            float x;
-            float y;
-            float z;
+           public float x;
+           public float y;
+           public float z;
 
            public  myvector(float a, float b, float c)
             {
@@ -76,20 +79,55 @@ namespace WindowsFormsApp1
 
         }
 
+        private Color generateRGB(double X)
+        {
+            Color color;
+
+            int red;
+            int green;
+            int blue;
+            TransColor.HsvToRgb(X * 360, 1, 1, out red, out green, out blue);
+
+            color = Color.FromArgb(red, green, blue);
+
+            return color;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             //  Graphics g = Graphics.FromImage(bmp);
 
-      //   int i = 270;
-        //    int j = 140;
-           for (int j = 0; j < 480; j++)
+            //   int i = 270;
+            //    int j = 140;
+            float myv = -1;
+            myvector dir = new myvector(0.0f, 0.0f, 0.0f);
+
+            for ( int j = 0; j < 10;j++)
+            for ( int i = 0; i < 100; i++)
+            {
+                    Color c = generateRGB(i/100.0f);
+                    bmp.SetPixel(i, j, c);
+
+                }
+
+            for (int j = 50; j < 480; j++)
                 for ( int i = 0; i < 640; i++)
                 {
                     float value=0.0f;
-                    myvector dir=new myvector(0.0f,0.0f,0.0f)  ;
                     mytest(i, j,  ref value, ref dir);
 
-                    Color c = Color.FromArgb((int)value, (int)value, (int)value);
+                    if ( value > 0 )
+                    {
+
+                        myv = value/ SCALE;
+                        Color c = generateRGB(myv);
+                        bmp.SetPixel(i, j, c);
+                       // Debug.WriteLine(myv);
+                    }
+
+                    //Color c = Color.FromArgb((int)value, (int)value, (int)value);
+
+
 
                     Application.DoEvents();
                     pictureBox1.Invalidate();
@@ -98,9 +136,9 @@ namespace WindowsFormsApp1
 
 
 
+            Debug.WriteLine(myv);
         }
-        const double maxdis = Double.MaxValue;
-
+       
         void mytest(int x,int y , ref float  val, ref myvector dir)
         {
             double dx=0, dy=0;
@@ -110,6 +148,9 @@ namespace WindowsFormsApp1
             int lens = alist.Count;
 
             bool allhave = true;
+
+            float  retx = 0;
+            float rety = 0;
 
 
             for (int k = 0; k < 360; k = k + 10)
@@ -129,7 +170,7 @@ namespace WindowsFormsApp1
                 double B1 = -dx;
                 double C1 = A1 * x + B1 * y;
 
-                bool bfind = false;
+               // bool bfind = false;
                 double nx=0, ny=0;
 
                 double shortest = maxdis;
@@ -190,19 +231,45 @@ namespace WindowsFormsApp1
                 //與某線段找到交點
                 if (shortest < maxdis)
                 {
-                    bfind = true;
-                //    g.DrawLine(pen, new Point(x, y), new Point((int)sx, (int)sy));
-                   // break;
-                }else //都沒有找到交點
+                    //    bfind = true;
+                    if (Math.Abs(dx) > 0.0001)
+                        retx +=(float) (dx / shortest);
+
+                    if (Math.Abs(dy) > 0.0001)
+                        rety += (float)(dy / shortest);
+
+
+                    //    g.DrawLine(pen, new Point(x, y), new Point((int)sx, (int)sy));
+                    // break;
+                }
+                else //都沒有找到交點,只要找到一個即是外部點
                 {
                     allhave = false;
+                    break;
 
                 }
 
             }
 
             if (!allhave)
-                bmp.SetPixel(x, y, Color.Red);
+            {
+                dir.x = 0;
+                dir.y = 0;
+                val = -1;
+               bmp.SetPixel(x, y, Color.White);
+            }else
+            {
+                val =(float) Math.Sqrt(retx * retx + rety * rety);
+
+                dir.x = retx/val;
+                dir.y = rety/val;
+
+                Debug.WriteLine(val);
+                val = val * 10;
+                if (val > SCALE)
+                    val = SCALE;
+
+            }
             //val = (x + y) % 255;
 
         }
