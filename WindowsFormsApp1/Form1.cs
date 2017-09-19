@@ -137,10 +137,10 @@ namespace WindowsFormsApp1
             //   int i = 270;
             //    int j = 140;
             float myv = -1;
-           
-          //  myvector dir = new myvector(0.0f, 0.0f);
 
-            
+            //  myvector dir = new myvector(0.0f, 0.0f);
+
+            DateTime t1 = DateTime.Now;
 
             int idx;
 
@@ -153,24 +153,30 @@ namespace WindowsFormsApp1
 
                     mytest(i, j,  ref values[idx], ref dir[idx]);
 
-                    if ( values[idx] > 0 )
-                    {
+            //        if ( values[idx] > 0 )
+            //        {
 
-                        myv = values[idx];
-                        Color c = generateRGB(myv);
-                        bmp.SetPixel(i, j, c);
-                       // Debug.WriteLine(myv);
-                    }
+            //            myv = values[idx];
+            //            Color c = generateRGB(myv);
+            ////            bmp.SetPixel(i, j, c);
+            //           // Debug.WriteLine(myv);
+            //        }
 
                     //Color c = Color.FromArgb((int)value, (int)value, (int)value);
 
 
 
-                    Application.DoEvents();
-                    pictureBox1.Invalidate();
+                  //  Application.DoEvents();
+                  //  pictureBox1.Invalidate();
 
                 }
 
+
+            DateTime t2 = DateTime.Now;
+            TimeSpan span = t2 - t1;
+            Debug.WriteLine("finish in " + span.ToString());
+
+            redraw();
 
             for (int j = 0; j < 10; j++)
                 for (int i = 0; i < 100; i++)
@@ -301,7 +307,7 @@ namespace WindowsFormsApp1
                 dir.x = 0;
                 dir.y = 0;
                 val = -1;
-               bmp.SetPixel(x, y, Color.White);
+    //           bmp.SetPixel(x, y, Color.White);
             }else
             {
                 val =(float) Math.Sqrt(retx * retx + rety * rety);
@@ -309,7 +315,7 @@ namespace WindowsFormsApp1
                 dir.x = retx/val;
                 dir.y = rety/val;
 
-                Debug.WriteLine(val);
+     //           Debug.WriteLine(val);
                 val = val * 10;
                 if (val > SCALE)
                     val = SCALE;
