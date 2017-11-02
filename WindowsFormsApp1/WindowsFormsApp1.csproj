@@ -8,10 +8,16 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>WindowsFormsApp1</RootNamespace>
     <AssemblyName>WindowsFormsApp1</AssemblyName>
+<<<<<<< HEAD
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
+=======
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -79,9 +85,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+=======
+    <None Include="App.config" />
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

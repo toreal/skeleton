@@ -22,6 +22,7 @@ namespace WindowsFormsApp1
             pictureBox1.Image = bmp;
           //  for ( int i = 0; i < 640*480; i++)
            //    dir[i] = new myvector(0, 0);
+<<<<<<< HEAD
            
         }
         ArrayList alist = new ArrayList();
@@ -43,11 +44,27 @@ namespace WindowsFormsApp1
         int controlPointX ;
         int controlPointY ;
 
+=======
+
+        }
+        ArrayList alist = new ArrayList();
+
+        Bitmap bmp = new Bitmap(640, 480);
+      
+         myvector [] dir = new myvector[640*480];
+        float[] values = new float[640 * 480];
+        const double maxdis = Double.MaxValue;
+        const float SCALE = 30;
+
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
             Point p = e.Location;
             alist.Add(p);
+<<<<<<< HEAD
             
+=======
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
             redraw();
 
         }
@@ -62,7 +79,11 @@ namespace WindowsFormsApp1
             int lens = alist.Count;
             Pen pen = new Pen(Brushes.Red,5);
 
+<<<<<<< HEAD
             for(int i = 0; i < lens; i++)          //連接2點
+=======
+            for(int i = 0; i < lens; i++)
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
             {
                 Point p = (Point) alist[i];
                 Point q = (Point)alist[(i+1)%lens];
@@ -139,7 +160,11 @@ namespace WindowsFormsApp1
                 return ret;
             }
 
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
         }
 
         private Color generateRGB(double X)
@@ -237,15 +262,26 @@ namespace WindowsFormsApp1
 
 
 
+<<<<<<< HEAD
                 dx = Math.Cos(k*Math.PI/180);       //x1-x2
                 dy = Math.Sin(k*Math.PI/180);       //y1-y2
+=======
+                dx = Math.Cos(k*Math.PI/180);
+                dy = Math.Sin(k*Math.PI/180);
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
 
                 //https://stackoverflow.com/questions/4543506/algorithm-for-intersection-of-2-lines
 
 
+<<<<<<< HEAD
                 double A1 = dy;  
                 double B1 = -dx; 
                 double C1 = A1 * x + B1 * y;    //得到協直線
+=======
+                double A1 = dy;
+                double B1 = -dx;
+                double C1 = A1 * x + B1 * y;
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
 
                // bool bfind = false;
                 double nx=0, ny=0;
@@ -447,6 +483,7 @@ namespace WindowsFormsApp1
             Graphics g = Graphics.FromImage(bmp);
             Pen pen = new Pen(Brushes.Black, 1);
             Pen pen2 = new Pen(Brushes.White, 1);
+<<<<<<< HEAD
             Pen pen3 = new Pen(Brushes.Blue, 3);
             float step = 1.0f;                                  //每個收斂點的距離
 
@@ -464,10 +501,25 @@ namespace WindowsFormsApp1
                 Point p1 = (Point)alist[i];
                 Point p2 = (Point)alist[(i + 1) % lens];
                 myvector p = 0.5f * (new myvector(p1.X, p1.Y) + new myvector(p2.X, p2.Y));
+=======
+            float step = 2.0f;
+
+            int[] buf = { 1, -1, 640, -640,2,-2,640*2,-640*2,640+1,640-1,-640+1,-640-1 };
+            int nbuf = buf.Length;
+
+            int lens = alist.Count;
+
+            for (int i = 0; i < lens; i++)
+            {
+                Point p1 = (Point)alist[i];
+                Point p2 = (Point)alist[(i + 1) % lens];
+                myvector p = 0.5f*(new myvector(p1.X,p1.Y) +new  myvector(p2.X,p2.Y));
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
 
                 //foreach( Point p in  alist)
                 //{
 
+<<<<<<< HEAD
                 int ini = ind = ((int)p.y) * 640 + (int)p.x;
 
                 int next = 0;
@@ -477,6 +529,16 @@ namespace WindowsFormsApp1
                 while (values[ind] < 0 && next < nbuf && ind >= 0 && ind < 640 * 480 || float.IsNaN(values[ind]))
                 {
                     ind = ini + buf[next];
+=======
+                int ini = ind = ((int)p.y) * 640 +(int) p.x;
+
+                int next = 0;
+                
+
+                while (values[ind] < 0 && next < nbuf && ind >=0 && ind < 640*480 || float.IsNaN(values[ind ]))
+                {
+                    ind = ini +buf[next];
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
                     next++;
 
                 }
@@ -485,6 +547,7 @@ namespace WindowsFormsApp1
                     continue;
 
 
+<<<<<<< HEAD
                 myvector np = p + step * dir[ind];
                 ind = (int)np.x + (((int)np.y) * 640);
 
@@ -496,10 +559,24 @@ namespace WindowsFormsApp1
                     ind = (int)np.x + ((int)np.y * 640);
 
                     g.DrawEllipse(pen, new Rectangle((int)np.x - 2, (int)np.y - 2, 4, 4));
+=======
+                myvector np= p + step *dir[ind];
+                ind = (int)np.x + (((int)np.y) * 640);
+
+                
+
+                while(values[ind] > 0.001 )
+                {
+                    np = np + step*dir[ind];
+                    ind = (int)np.x + ((int)np.y * 640);
+
+                    g.DrawEllipse(pen, new Rectangle((int)np.x-2,(int)np.y-2,4,4));
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
                 }
 
                 g.DrawEllipse(pen2, new Rectangle((int)np.x - 3, (int)np.y - 3, 6, 6));
 
+<<<<<<< HEAD
                 //controlPointX = (int)np.x-3;
                 //controlPointY = (int)np.y-3;
 
@@ -688,5 +765,12 @@ namespace WindowsFormsApp1
     }
 
 }*/
+=======
+
+            }
+
+            pictureBox1.Invalidate();
+        }
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
     }
 }

@@ -7,6 +7,7 @@ c:\users\james\documents\visual studio 2017\Projects\WindowsFormsApp1\WindowsFor
 c:\users\james\documents\visual studio 2017\Projects\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.GenerateResource.Cache
 c:\users\james\documents\visual studio 2017\Projects\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
 c:\users\james\documents\visual studio 2017\Projects\WindowsFormsApp1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+<<<<<<< HEAD
 C:\Users\ASUS\Downloads\skeleton-master\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
 C:\Users\ASUS\Downloads\skeleton-master\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
 C:\Users\ASUS\Downloads\skeleton-master\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
@@ -36,3 +37,5 @@ C:\Users\ASUS\Desktop\老師專案\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.c
 C:\Users\ASUS\Desktop\老師專案\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.CoreCompileInputs.cache
 C:\Users\ASUS\Desktop\老師專案\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
 C:\Users\ASUS\Desktop\老師專案\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+=======
+>>>>>>> 846e9cd3598fa6030d69961096402a3c4b7ca478
